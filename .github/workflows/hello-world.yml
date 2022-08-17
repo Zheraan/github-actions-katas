@@ -3,11 +3,16 @@ on: push
 jobs:
   my-job:
     runs-on: ubuntu-latest
-    container: gradle:6-jdk11
+    container: gradle:6-alpine
     steps:
       - name: Clone-down
         uses: actions/checkout@v2       
       - name: Build-app
         run: chmod +x ci/build-app.sh && ci/build-app.sh
-      - name: Test
+      - name: Test-app
         run: chmod +x ci/unit-test-app.sh && ci/unit-test-app.sh
+      - name: Upload-artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: app
+          path: .
