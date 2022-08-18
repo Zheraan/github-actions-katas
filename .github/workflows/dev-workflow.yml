@@ -9,7 +9,7 @@ env:
   GIT_COMMIT: ${{ github.sha }}
 jobs:
   clone-down:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     container: gradle:6-jdk11
     steps:
       - name: Checkout
@@ -20,7 +20,7 @@ jobs:
           name: app
           path: .
   Build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: clone-down
     container: gradle:6-jdk11
     steps:
@@ -37,7 +37,7 @@ jobs:
           name: app
           path: .
   Test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: [Build]
     container: gradle:6-jdk11
     steps:
@@ -49,7 +49,7 @@ jobs:
       - name: Test-app
         run: chmod +x ci/unit-test-app.sh && ci/unit-test-app.sh
   Docker-image:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: [Build,Test]
     steps:
     - name: Download code
@@ -62,7 +62,7 @@ jobs:
     - name: push docker
       run: chmod +x ci/push-docker.sh && ci/push-docker.sh
   Performance-test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: [Docker-image]
     steps:
     - name: Download code
